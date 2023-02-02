@@ -1,0 +1,38 @@
+name: msvc
+
+on:
+  workflow_call:
+    input:
+      config-path:
+        required: true
+        type: string
+
+    output:
+      setup_file:
+        description: "setup file"
+        value: ${{ jobs.build_msvc.output.exe_file }}
+
+jobs:
+  build_msvc:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: cmd
+    output:
+      exe_file: ${{ steps.step_output.file }}
+
+    steps:
+
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: echo
+        run: |
+          echo "input config path: ${{ input.config-path }}"
+          echo "input config path: ${{ input.config-path }}" > windows_setup.txt
+
+      - id: step_output
+        run: |
+          cat exe 
+          echo "file=windows_setup.txt" >> "$GITHUB_OUTPUT"
