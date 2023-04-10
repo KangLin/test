@@ -1,15 +1,17 @@
 name: build
 
 on:
-
+  workflow_dispatch:
+  
 jobs:
   build_msvc:
-    steps:
-      - uses: ./.github/workflows/msvc.yml
+    uses: ./.github/workflows/msvc.yml
 	  
   deploy:
+    runs-on: ubuntu-laster
     needs: [build_msvc]
     steps:
-      - run: |
-        echo "${{ build_msvc.output.setup_file }}"
-        cat ${{ build_msvc.output.setup_file }}
+      - name: "echo file"
+        run: |
+          echo "${{ build_msvc.output.setup_file }}"
+          cat ${{ build_msvc.output.setup_file }}
