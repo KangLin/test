@@ -1,24 +1,39 @@
 name: build
 
-on: [push]
+env:
+  artifact_path: artifact_path
+
+on: 
+  push:
   
 jobs:
-  build_msvc:
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: true
-      - uses: ./.github/workflows/msvc.yml
-	  
+  build_linux:
+    uses: ./.github/workflows/ubuntu.yml
+
+  build_windows:
+    uses: ./.github/workflows/msvc.yml
+
   deploy:
-    runs-on: ubuntu-laster
-    needs: [build_msvc]
+    runs-on: ubuntu-latest
+    needs: [build_linux, build_windows]
     steps:
-      - uses: actions/checkout@v3
+      - name: Check out repository
+        uses: actions/checkout@v3
         with:
           submodules: true
 
-      - name: "echo file"
+      - name: Download linux
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ needs.build_linux.outputs.name }}
+          path: ${{ env.artifact_path }}
+
+      - name: Download windows
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ needs.build_windows.outputs.name }}
+          path: ${{ env.artifact_path }}
+
+      - name: Display structure of downloaded files
         run: |
-          echo "${{ build_msvc.output.setup_file }}"
-          cat ${{ build_msvc.output.setup_file }}
+          ls -R

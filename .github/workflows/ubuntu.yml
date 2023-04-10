@@ -1,4 +1,4 @@
-name: build_msvc
+name: build_ubuntu
 
 on:
   workflow_call:
@@ -7,26 +7,31 @@ on:
         description: "The artifact name"
         value: ${{ jobs.build_ubuntu.outputs.name }}
 
-jobs:
-  build_msvc:
-    runs-on: windows-latest
-    defaults:
-      run:
-        shell: cmd
+env:
+  artifact_name: build_ubuntu
 
+jobs:
+  build_ubuntu:
+    strategy:
+      matrix:
+        os: [Ubuntu-22.04, Ubuntu-20.04]
+
+    runs-on: ${{matrix.os}}
+    
     env:
       artifact_name: build_msvc
 
     # Map the job outputs to step outputs
     outputs:
       name: ${{ env.artifact_name }}
-
+  
     steps:
+
       - name: echo
         run: |
-          echo "build msvc" > msvc
+          echo "build ${{matrix.os}}" > build2_${{matrix.os}}.txt
 
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ env.artifact_name }}
-          path: msvc
+          path: build2_${{matrix.os}}.txt
