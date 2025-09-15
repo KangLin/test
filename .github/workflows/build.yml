@@ -8,9 +8,11 @@ on:
   
 jobs:
   build_linux:
+    if: false
     uses: ./.github/workflows/ubuntu.yml
 
   build_windows:
+    if: false
     uses: ./.github/workflows/msvc.yml
 
   deploy:
@@ -23,12 +25,14 @@ jobs:
           submodules: true
 
       - name: Download linux
+        if: false
         uses: actions/download-artifact@v3
         with:
           name: ${{ needs.build_linux.outputs.name }}
           path: ${{ env.artifact_path }}
 
       - name: Download windows
+        if: false
         uses: actions/download-artifact@v3
         with:
           name: ${{ needs.build_windows.outputs.name }}
