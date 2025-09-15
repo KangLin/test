@@ -7,40 +7,15 @@ on:
   push:
   
 jobs:
-  build_linux:
-    if: false
-    uses: ./.github/workflows/ubuntu.yml
-
-  build_windows:
-    if: false
-    uses: ./.github/workflows/msvc.yml
-
   deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-        with:
-          submodules: true
-
-      - name: Download linux
-        if: false
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ needs.build_linux.outputs.name }}
-          path: ${{ env.artifact_path }}
-
-      - name: Download windows
-        if: false
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ needs.build_windows.outputs.name }}
-          path: ${{ env.artifact_path }}
 
       - name: Display structure of downloaded files
         run: |
-          ls -R
-          DEBIAN_VERSION=0.0.36
+          export DEBIAN_VERSION=0.0.36
           RPM_VERSION=${DEBIAN_VERSION//-/\~}
           echo $RPM_VERSION
           
