@@ -2,6 +2,7 @@ name: build
 
 env:
   artifact_path: artifact_path
+  DEBIAN_VERSION: 0.3.0
 
 on: 
   push:
@@ -15,7 +16,6 @@ jobs:
 
       - name: Display structure of downloaded files
         run: |
-          export DEBIAN_VERSION=0.0.36
           RPM_VERSION=${DEBIAN_VERSION//-/\~}
           echo $RPM_VERSION
           
