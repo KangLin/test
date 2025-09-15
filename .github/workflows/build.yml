@@ -37,3 +37,7 @@ jobs:
       - name: Display structure of downloaded files
         run: |
           ls -R
+          DEBIAN_VERSION=0.0.36
+          RPM_VERSION=${DEBIAN_VERSION//-/\~}
+          echo $RPM_VERSION
+          
